@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('main_page.html', title="Prof")
+    return render_template('main_page.html', title="InvokerCase")
 
 
 if __name__ == '__main__':
