@@ -12,8 +12,8 @@ def login():
     data = request.get_json()
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.name == data['name'], User.hashed_password == data['hashed_pass']).first()
-    res = {'id': user.id, 'name': user.name, 'hashed_pass': user.hashed_pass, 'balance': user.balance}
-    return jsonify(user)
+    res = {'id': user.id, 'name': user.name, 'hashed_pass': user.hashed_password, 'balance': user.balance}
+    return jsonify(res)
 
 
 @app.route('/register', methods=['POST'])
@@ -24,6 +24,7 @@ def register():
     user = User()
     user.name = data['name']
     user.hashed_password = data['hashed_pass']
+    user.balance = 0
     db_sess.add(user)
     db_sess.commit()
     return '', 200
