@@ -6,6 +6,10 @@ from db_data.users import User
 app = Flask(__name__)
 
 
+@app.route('/')
+def index():
+    return render_template('index.html', title="InvokerCase_beta")
+=======
 @app.route('/login', methods=['POST'])
 def login():
     # args: name, hashed_pass(md5)
@@ -28,6 +32,7 @@ def register():
     db_sess.add(user)
     db_sess.commit()
     return '', 200
+
 
 
 if __name__ == '__main__':
