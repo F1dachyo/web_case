@@ -10,7 +10,12 @@ app = Flask(__name__)
 api = Blueprint('api', __name__)
 
 
-@api.route('/login', methods=['POST'])
+@app.route('/')
+def index():
+    return render_template('index.html', title="InvokerCase_beta")
+
+  
+@app.route('/login', methods=['POST'])
 def login():
     # args: name, hashed_pass(md5)
     data = request.get_json()
@@ -106,7 +111,6 @@ def open_case():
         'image_bytes': skin.image_bytes
     }
     return jsonify(res)
-
 
 if __name__ == '__main__':
     db_session.global_init("db/database.sqlite")
