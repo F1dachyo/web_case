@@ -58,6 +58,26 @@
     left: 50%;
     transform: translate(-50%, 0);
   }
+  .hidden {
+  visibility: hidden;
+  grid-gap: 2vw 1.5vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    justify-content: space-between;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.visible {
+  visibility: visible;
+  grid-gap: 2vw 1.5vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    justify-content: space-between;
+    margin-top: 15px;
+    width: 100%;
+}
+
 </style>
 </head>
 <body>
@@ -76,7 +96,7 @@
                     </div>
                     <div class="skin-info">
                         <div class="skin-name">
-                            {{item["name"]}}
+                            {{ item["name"] }}
                         </div>
                     </div>
                 </div>
@@ -85,10 +105,39 @@
       {% endfor %}
   </div>
 </div>
+
+
 </div>
 <button type="button" class="btn btn-outline-warning" onclick="startAnimation()">Открыть</button>
+<div class="hidden" id="contentToShow">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Ваш выигрыш:</h4>
+                    <div class="case-icon">
+                        <img src="data:image/png;base64,{{items[win_elem]['image_bytes']}}"
+                             style="opacity: 1;">
+                    </div>
+                    <div class="case-info">
+                        <div class="case-name" href="#">
+                            {{items[win_elem]["name"]}}
+                        </div>
 
+                    </div>
+                    <button type="button" class="btn btn-outline-warning" onclick="">Продать за
+                            {{items[win_elem]["price"]}} рублей</button>
+                    <button type="button" class="btn btn-outline-warning" onclick="">Добавить в инвентарь</button>
+                </div>
+        </div>
+    </div>
 <script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+  const element = document.getElementById('case');
+  element.addEventListener('animationend', () => {
+    const contentToShow = document.getElementById('contentToShow');
+    contentToShow.classList.remove('hidden');
+    contentToShow.classList.add('visible');
+    });
+  });
   function startAnimation() {
     document.getElementById('case').classList.add('running');
   }

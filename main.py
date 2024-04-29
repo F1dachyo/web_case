@@ -32,7 +32,7 @@ def open_case_by_id(id):
     case = db_sess.query(Case).filter(Case.id == id).first()
     skins_id = case.skins_ids.split(', ')
     skins_line = []
-    for skins in range(100):
+    for skins in range(387):
         skin = db_sess.query(Skin).filter(Skin.id == skins_id[randint(0, len(skins_id) - 1)]).first()
         res = {
             'id': skin.id,
@@ -48,7 +48,10 @@ def open_case_by_id(id):
 @app.route('/case/<int:id>')
 def open_case(id):
     items = open_case_by_id(id)
-    return render_template('open_case.html', title="InvokerCase_beta", duration=randint(10000, 11000), items=items)
+    duration = randint(10000, 15000)
+    print(duration)
+    return render_template('open_case.html', title="InvokerCase_beta", duration=duration,
+                           items=items, win_elem=int((duration / 300) + (387 / 2)))
 
 
 @app.route('/login', methods=['GET', 'POST'])
