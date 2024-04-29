@@ -8,6 +8,7 @@ from db_data.users import User
 from db_data.cases import Case
 from db_data.skins import Skin
 from random import randint
+from flask_login import LoginManager
 
 from forms.loginform import LoginForm
 from forms.registerform import RegisterForm
@@ -15,7 +16,8 @@ from forms.registerform import RegisterForm
 app = Flask(__name__)
 api = Blueprint('api', __name__)
 app.config['SECRET_KEY'] = 'invoker_case_secret_key'
-
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 @app.route('/')
 def index():
@@ -50,14 +52,12 @@ def reqister():
                                    form=form,
                                    message="Пароли не совпадают")
         db_sess = db_session.create_session()
-        if db_sess.query(User).filter(User.email == form.email.data).first():
+        if db_sess.query(User).filter(User.name == form.email.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть")
         user = User(
-            name=form.name.data,
-            email=form.email.data,
-            about=form.about.data
+            name=form.email.data,
         )
         user.set_password(form.password.data)
         db_sess.add(user)
