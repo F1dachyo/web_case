@@ -1,8 +1,9 @@
 import json
 
 import requests as requests
+import base64
 from flask import Flask, jsonify, request, Blueprint, render_template, redirect
-from flask_login import login_user
+from flask_login import login_user, login_required, logout_user
 from db_data import db_session
 from db_data.users import User
 from db_data.cases import Case
@@ -19,9 +20,36 @@ app.config['SECRET_KEY'] = 'invoker_case_secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+
 @app.route('/')
 def index():
-    return render_template('index.html', title="InvokerCase_beta")
+    cases = get_cases()
+    return render_template('index.html', title="InvokerCase_beta", cases=cases)
+
+
+def open_case_by_id(id):
+    db_sess = db_session.create_session()
+    case = db_sess.query(Case).filter(Case.id == id).first()
+    skins_id = case.skins_ids.split(', ')
+    skins_line = []
+    for skins in range(100):
+        skin = db_sess.query(Skin).filter(Skin.id == skins_id[randint(0, len(skins_id) - 1)]).first()
+        res = {
+            'id': skin.id,
+            'name': skin.name,
+            'rarity': skin.rarity,
+            'price': skin.price,
+            'image_bytes': base64.b64encode(skin.image_bytes).decode("utf-8")
+        }
+        skins_line.append(res)
+    return skins_line
+
+
+@app.route('/case/<int:id>')
+def open_case(id):
+    items = open_case_by_id(id)
+    return render_template('open_case.html', title="InvokerCase_beta", duration=randint(10000, 11000), items=items)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -33,8 +61,8 @@ def login():
             "hashed_pass": form.password.data
         }
         user_data = requests.post('http://127.0.0.1:5000/api/login', json=params).text
-        user = User()
-        if user:
+        user = db_sess.query(User).filter(User.name == params["name"]).first()
+        if user and user.check_password(params["hashed_pass"]):
             login_user(user, remember=form.remember_me.data)
             return redirect("/")
         return render_template('login.html',
@@ -65,7 +93,12 @@ def reqister():
         return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form)
 
-  
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
+
 @api.route('/login', methods=['POST'])
 def login():
     # args: name, hashed_pass(md5)
@@ -77,7 +110,6 @@ def login():
     else:
         res = {'error': "Login or password are incorrect"}
     return jsonify(res)
-
 
 
 @api.route('/register', methods=['POST'])
@@ -114,20 +146,22 @@ def get_skin_image():
     return jsonify(res)
 
 
-@api.route('/get_case', methods=['POST'])
-def get_case():
+def get_cases():
     # id
-    data = request.get_json()
+    # data = request.get_json()
     db_sess = db_session.create_session()
-    case = db_sess.query(Case).filter(Case.id == data['id'])
-    res = {
-        'id': case.id,
-        'name': case.name,
-        'price': case.price,
-        'image_bytes': case.image_bytes,
-        'skins_ids': case.skins_ids
-    }
-    return jsonify(res)
+    cases = db_sess.query(Case)
+    answer = []
+    for case in cases:
+        res = {
+            'id': case.id,
+            'name': case.name,
+            'price': case.price,
+            'image_bytes': base64.b64encode(case.image_bytes).decode("utf-8"),
+            'skins_ids': case.skins_ids
+        }
+        answer.append(res)
+    return answer
 
 
 @api.route('/get_skin', methods=['POST'])
@@ -163,6 +197,13 @@ def open_case():
         'image_bytes': skin.image_bytes
     }
     return jsonify(res)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
+    return db_sess.query(User).get(user_id)
+
 
 if __name__ == '__main__':
     db_session.global_init("db/database.sqlite")

@@ -15,6 +15,23 @@
     border: 2px solid #333;
     margin-bottom: 20px; /* Added margin to push the button lower */
   }
+   .case1::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    border-left: 2px solid red;
+    transform: translateX(-50%);
+  }
+  .case1 {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    will-change: transform;
+  }
+
   .case {
     width: 100%;
     display: flex;
@@ -22,6 +39,7 @@
     align-items: center;
     will-change: transform;
   }
+
   .item {
     width: 300px;
     flex-shrink: 0;
@@ -33,7 +51,7 @@
   }
   @keyframes slide {
     0% { transform: translateX(0); } /* Start fast */
-    100% { transform: translateX(-900px); } /* End fast */
+    100% { transform: translateX(-{{duration}}px); } /* End fast */
   }
   button {
     padding: 10px 20px; /* Adjust padding to your preference */
@@ -44,22 +62,26 @@
 
 <div class="case-container">
   <div class="case" id="case">
-    <div class="item">Item 1</div>
-    <div class="item">Item 2</div>
-    <div class="item">Item 3</div>
-    <div class="item">Item 1</div>
-    <div class="item">Item 2</div>
-    <div class="item">Item 3</div>
-    <div class="item">Item 1</div>
-    <div class="item">Item 2</div>
-    <div class="item">Item 3</div>
-    <div class="item">Item 1</div>
-    <div class="item">Item 2</div>
-    <div class="item">Item 3</div>
-    <div class="item">Item 1</div>
-    <div class="item">Item 2</div>
-    <div class="item">Item 3</div>
+      <div class="case1" id="case1">
+      {% for item in items %}
+        <div class="item">
+            <div class="card">
+                <div class="card-body">
+                    <div class="skin-icon">
+                        <img src="data:image/png;base64,{{item['image_bytes']}}"
+                             style="opacity: 1;">
+                    </div>
+                    <div class="skin-info">
+                        <div class="skin-name">
+                            {{item["name"]}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      {% endfor %}
   </div>
+</div>
 </div>
 <button type="button" class="btn btn-outline-warning" onclick="startAnimation()">Открыть</button>
 

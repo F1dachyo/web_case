@@ -41,7 +41,7 @@ h2 {
     color: #fff;
     font-size: 16px;
     font-weight: 500;
-    line-height: 125%;
+    line-height: 100%;
     padding-top: 16px;
     text-align: center;
     width: 100%;
@@ -64,9 +64,12 @@ h2 {
     text-transform: uppercase;
     transform: translate(-50%);
     width: max-content;
-    bottom: 20px;
+    bottom: 40px;
 }
 
+.skin-name {
+    color: white;
+}
 
 img {
     height: auto;

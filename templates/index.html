@@ -2,177 +2,32 @@
 
 
 {% block content %}
-<h1>Название группы кейсов</h1>
+<h1>Все кейсы</h1>
 <div class="container">
     <div class="cases-list">
+{% for item in cases %}
         <div class="card">
-            <a href="/case">
+            <a href="/case/{{item['id']}}">
                 <div class="card-body">
                     <div class="case-icon">
-                        <img src=""
+                        <img src="data:image/png;base64,{{item['image_bytes']}}"
                              style="opacity: 1;">
                     </div>
                     <div class="case-info">
                         <div class="case-name" href="#">
-                            Название кейса
+                            {{item["name"]}}
                         </div>
                         <div class="case-price">
-                            Цена
+                            {{item["price"]}} рублей
                         </div>
                     </div>
                 </div>
             </a>
         </div>
-        <div class="card">
-            <a href="/case">
-                <div class="card-body">
-                    <div class="case-icon">
-                        <img src=""
-                             style="opacity: 1;">
-                    </div>
-                    <div class="case-info">
-                        <div class="case-name" href="#">
-                            Название кейса
-                        </div>
-                        <div class="case-price">
-                            Цена
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="card">
-            <a href="/case">
-                <div class="card-body">
-                    <div class="case-icon">
-                        <img src=""
-                             style="opacity: 1;">
-                    </div>
-                    <div class="case-info">
-                        <div class="case-name" href="#">
-                            Название кейса
-                        </div>
-                        <div class="case-price">
-                            Цена
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="card">
-            <a href="/case">
-                <div class="card-body">
-                    <div class="case-icon">
-                        <img src=""
-                             style="opacity: 1;">
-                    </div>
-                    <div class="case-info">
-                        <div class="case-name" href="#">
-                            Название кейса
-                        </div>
-                        <div class="case-price">
-                            Цена
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="card">
-            <a href="/case">
-                <div class="card-body">
-                    <div class="case-icon">
-                        <img src=""
-                             style="opacity: 1;">
-                    </div>
-                    <div class="case-info">
-                        <div class="case-name" href="#">
-                            Название кейса
-                        </div>
-                        <div class="case-price">
-                            Цена
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="card">
-            <a href="/case">
-                <div class="card-body">
-                    <div class="case-icon">
-                        <img src=""
-                             style="opacity: 1;">
-                    </div>
-                    <div class="case-info">
-                        <div class="case-name" href="#">
-                            Название кейса
-                        </div>
-                        <div class="case-price">
-                            Цена
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="card">
-            <a href="/case">
-                <div class="card-body">
-                    <div class="case-icon">
-                        <img src=""
-                             style="opacity: 1;">
-                    </div>
-                    <div class="case-info">
-                        <div class="case-name" href="#">
-                            Название кейса
-                        </div>
-                        <div class="case-price">
-                            Цена
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="card">
-            <a href="/case">
-                <div class="card-body">
-                    <div class="case-icon">
-                        <img src=""
-                             style="opacity: 1;">
-                    </div>
-                    <div class="case-info">
-                        <div class="case-name" href="#">
-                            Название кейса
-                        </div>
-                        <div class="case-price">
-                            Цена
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="card">
-            <a href="/case">
-                <div class="card-body">
-                    <div class="case-icon">
-                        <img src=""
-                             style="opacity: 1;">
-                    </div>
-                    <div class="case-info">
-                        <div class="case-name" href="#">
-                            Название кейса
-                        </div>
-                        <div class="case-price">
-                            Цена
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
+        {% endfor %}
     </div>
 </div>
 
 
-{% for item in cases %}
 
-
-{% endfor %}
 {% endblock %}
