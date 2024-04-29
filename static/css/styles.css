@@ -1,0 +1,74 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #050B1C;
+}
+
+div {
+    display: block;
+}
+h1 {
+    margin-top: 2rem;
+    color: white;
+}
+
+h2 {
+    margin-top: 2rem;
+    color: white;
+}
+
+.card{
+    align-items: center;
+    background: linear-gradient(180deg,#0b1020 73.4%,rgba(11,16,32,0));
+    border-radius: 12px;
+    clip-path: inset(-100vw -100vw 0 -100vw);
+    height: auto;
+}
+
+.cases-list {
+    grid-gap: 2vw 1.5vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    justify-content: space-between;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.case-name {
+
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 125%;
+    padding-top: 16px;
+    text-align: center;
+    width: 100%;
+}
+
+.case-price {
+    align-items: center;
+    background: linear-gradient(94.59deg,#1a1e2b -4.64%,#1f2435 114.24%);
+    border-radius: 99999px;
+    bottom: -20px;
+    color: #9faaba;
+    display: flex;
+    font-size: 14px;
+    font-weight: 700;
+    justify-content: space-between;
+    left: 50%;
+    line-height: 16px;
+    padding: 4px;
+    position: absolute;
+    text-transform: uppercase;
+    transform: translate(-50%);
+    width: max-content;
+    bottom: 20px;
+}
+
+
+img {
+    height: auto;
+    max-width: 100%;
+}

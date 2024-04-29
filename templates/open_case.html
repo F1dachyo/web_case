@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<style>
+  .case-container {
+    grid-gap: 2vw 1.5vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    justify-content: space-between;
+    margin-top: 15px;
+    width: 100%;
+    overflow: hidden;
+    border: 2px solid #333;
+    margin-bottom: 20px; /* Added margin to push the button lower */
+  }
+  .case {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    will-change: transform;
+  }
+  .item {
+    width: 300px;
+    flex-shrink: 0;
+    text-align: center;
+    color: white;
+  }
+  .running {
+    animation: slide 5s forwards; /* Animation lasts for 12 seconds */
+  }
+  @keyframes slide {
+    0% { transform: translateX(0); } /* Start fast */
+    100% { transform: translateX(-900px); } /* End fast */
+  }
+  button {
+    padding: 10px 20px; /* Adjust padding to your preference */
+  }
+</style>
+</head>
+<body>
+
+<div class="case-container">
+  <div class="case" id="case">
+    <div class="item">Item 1</div>
+    <div class="item">Item 2</div>
+    <div class="item">Item 3</div>
+    <div class="item">Item 1</div>
+    <div class="item">Item 2</div>
+    <div class="item">Item 3</div>
+    <div class="item">Item 1</div>
+    <div class="item">Item 2</div>
+    <div class="item">Item 3</div>
+    <div class="item">Item 1</div>
+    <div class="item">Item 2</div>
+    <div class="item">Item 3</div>
+    <div class="item">Item 1</div>
+    <div class="item">Item 2</div>
+    <div class="item">Item 3</div>
+  </div>
+</div>
+<button type="button" class="btn btn-outline-warning" onclick="startAnimation()">Открыть</button>
+
+<script>
+  function startAnimation() {
+    document.getElementById('case').classList.add('running');
+  }
+</script>
+
+</body>
+{% endblock %}

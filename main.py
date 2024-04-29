@@ -1,5 +1,5 @@
 import json
-from flask import Flask, jsonify, request, Blueprint
+from flask import Flask, jsonify, request, Blueprint, render_template
 from db_data import db_session
 from db_data.users import User
 from db_data.cases import Case
