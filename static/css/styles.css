@@ -72,3 +72,11 @@ img {
     height: auto;
     max-width: 100%;
 }
+
+label {
+    color: white;
+}
+
+h5 {
+    color: white;
+}

@@ -1,21 +1,72 @@
 import json
-from flask import Flask, jsonify, request, Blueprint, render_template
+
+import requests as requests
+from flask import Flask, jsonify, request, Blueprint, render_template, redirect
+from flask_login import login_user
 from db_data import db_session
 from db_data.users import User
 from db_data.cases import Case
 from db_data.skins import Skin
 from random import randint
 
+from forms.loginform import LoginForm
+from forms.registerform import RegisterForm
+
 app = Flask(__name__)
 api = Blueprint('api', __name__)
+app.config['SECRET_KEY'] = 'invoker_case_secret_key'
 
 
 @app.route('/')
 def index():
     return render_template('index.html', title="InvokerCase_beta")
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        params = {
+            "name": form.email.data,
+            "hashed_pass": form.password.data
+        }
+        user_data = requests.post('http://127.0.0.1:5000/api/login', json=params).text
+        user = User()
+        if user:
+            login_user(user, remember=form.remember_me.data)
+            return redirect("/")
+        return render_template('login.html',
+                               message="Неправильный логин или пароль",
+                               form=form)
+    return render_template('login.html', title='Авторизация', form=form)
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def reqister():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        if form.password.data != form.password_again.data:
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Пароли не совпадают")
+        db_sess = db_session.create_session()
+        if db_sess.query(User).filter(User.email == form.email.data).first():
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Такой пользователь уже есть")
+        user = User(
+            name=form.name.data,
+            email=form.email.data,
+            about=form.about.data
+        )
+        user.set_password(form.password.data)
+        db_sess.add(user)
+        db_sess.commit()
+        return redirect('/login')
+    return render_template('register.html', title='Регистрация', form=form)
+
   
-@app.route('/login', methods=['POST'])
+@api.route('/login', methods=['POST'])
 def login():
     # args: name, hashed_pass(md5)
     data = request.get_json()
@@ -26,6 +77,7 @@ def login():
     else:
         res = {'error': "Login or password are incorrect"}
     return jsonify(res)
+
 
 
 @api.route('/register', methods=['POST'])
