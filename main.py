@@ -151,6 +151,12 @@ def get_skin_image():
     return jsonify(res)
 
 
+@api.route('/balance', methods=['POST'])
+def balance():
+    db_sess = db_session.create_session()
+    return jsonify(db_sess.query(User).filter(User.email == request.get_json()['email']).first().balance)
+
+
 @api.route('/balance_case', methods=['POST'])
 def balance_case():
     # url, email,
@@ -168,6 +174,21 @@ def balance_case():
         return jsonify('success')
     else:
         return jsonify('insufficient balance')
+
+
+
+@api.route('/sell', methods=['POST'])
+def sell():
+    # text
+    data = request.get_json()
+    price = round(float(data['text'].split()[2].replace(',', '.')))
+    print(price)
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.name == data['email']).first()
+    user.balance += price
+    db_sess.commit()
+    print(user.balance)
+    return ''
 
 
 def get_cases():

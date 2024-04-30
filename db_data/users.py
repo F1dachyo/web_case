@@ -11,7 +11,7 @@ class User(SqlAlchemyBase, UserMixin):
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    balance = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    balance = sqlalchemy.Column(sqlalchemy.Integer, nullable=True, default=1000)
     is_active = True
 
     def set_password(self, password):

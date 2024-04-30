@@ -123,13 +123,42 @@
                         </div>
 
                     </div>
-                    <button type="button" class="btn btn-outline-warning" onclick="">Продать за
+                    <button type="button" class="btn btn-outline-warning" onclick="sellItem()">Продать за
                             {{items[win_elem]["price"]}} рублей</button>
                     <button type="button" class="btn btn-outline-warning" onclick="">Добавить в инвентарь</button>
                 </div>
         </div>
     </div>
 <script>
+  function getElementByXpath(path) {
+    return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+  }
+  email_elem = getElementByXpath("/html/body/header/nav/div/div/form/a");
+
+  fetch("http://127.0.0.1:5000/api/balance_case", {
+          method: "POST",
+          body: JSON.stringify({
+            url: window.location.href,
+            email: email
+          }),
+           headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        }).then((response) => response.json())
+            .then(function(value){
+                    if(value == "success") {
+                        document.getElementById('case').classList.add('running');
+                    } else {
+                        alert("Не хватает бабла")
+                    }
+        });
+
+
+  if (email_elem == null){
+     alert("Необходимо войти")
+  }
+
+  let isItemSold = false;
   document.addEventListener('DOMContentLoaded', (event) => {
   const element = document.getElementById('case');
   element.addEventListener('animationend', () => {
@@ -138,31 +167,55 @@
     contentToShow.classList.add('visible');
     });
   });
-  function getElementByXpath(path) {
-    return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+
+  function sellItem() {
+    if (!isItemSold) {
+        elem = getElementByXpath("/html/body/main/div[2]/div/div/button[1]");
+        email = getElementByXpath("/html/body/header/nav/div/div/form/a").textContent;
+        fetch("http://127.0.0.1:5000/api/sell", {
+          method: "POST",
+          body: JSON.stringify({
+            text: elem.textContent,
+            email: email
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        });
+        isItemSold = true;
+        elem.textContent = "Продано!";
+    }
   }
+
   function startAnimation() {
 
-    email = getElementByXpath("/html/body/header/nav/div/div/form/a").textContent;
-    console.log(window.location.href)
-    fetch("http://127.0.0.1:5000/api/balance_case", {
-      method: "POST",
-      body: JSON.stringify({
-        url: window.location.href,
-        email: email
-      }),
-       headers: {
-        "Content-type": "application/json; charset=UTF-8"
-      }
-    }).then((response) => response.json())
-        .then(function(value){
-                if(value == "success") {
-                    document.getElementById('case').classList.add('running');
-                } else {
-                    alert("Не хватает бабла")
-                }
-    });
+    email_elem = getElementByXpath("/html/body/header/nav/div/div/form/a");
 
+    if (email_elem == null){
+        alert("Необходимо войти")
+    }
+    else{
+
+        email = email_elem.textContent;
+        console.log(window.location.href)
+        fetch("http://127.0.0.1:5000/api/balance_case", {
+          method: "POST",
+          body: JSON.stringify({
+            url: window.location.href,
+            email: email
+          }),
+           headers: {
+            "Content-type": "application/json; charset=UTF-8"
+          }
+        }).then((response) => response.json())
+            .then(function(value){
+                    if(value == "success") {
+                        document.getElementById('case').classList.add('running');
+                    } else {
+                        alert("Не хватает бабла")
+                    }
+        });
+    }
 
   }
 </script>
