@@ -96,11 +96,13 @@ def reqister():
         return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form)
 
+
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect("/")
+
 
 @api.route('/login', methods=['POST'])
 def login():
@@ -149,6 +151,25 @@ def get_skin_image():
     return jsonify(res)
 
 
+@api.route('/balance_case', methods=['POST'])
+def balance_case():
+    # url, email,
+
+    data = request.get_json()
+    case_id = int(data['url'].split('case')[1].split('/')[1])
+
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.name == data['email']).first()
+    print(user.balance)
+    case = db_sess.query(Case).filter(Case.id == case_id).first()
+    if user.balance >= case.price:
+        user.balance -= case.price
+        db_sess.commit()
+        return jsonify('success')
+    else:
+        return jsonify('insufficient balance')
+
+
 def get_cases():
     # id
     # data = request.get_json()
@@ -165,7 +186,6 @@ def get_cases():
         }
         answer.append(res)
     return answer
-
 
 
 @api.route('/get_skin', methods=['POST'])
