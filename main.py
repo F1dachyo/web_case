@@ -27,6 +27,7 @@ def index():
     return render_template('index.html', title="InvokerCase_beta", cases=cases)
 
 
+
 def open_case_by_id(id):
     db_sess = db_session.create_session()
     case = db_sess.query(Case).filter(Case.id == id).first()
@@ -49,7 +50,6 @@ def open_case_by_id(id):
 def open_case(id):
     items = open_case_by_id(id)
     duration = randint(10000, 15000)
-    print(duration)
     return render_template('open_case.html', title="InvokerCase_beta", duration=duration,
                            items=items, win_elem=int((duration / 300) + (387 / 2)))
 

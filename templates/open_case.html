@@ -130,6 +130,14 @@
         </div>
     </div>
 <script>
+document.addEventListener('DOMContentLoaded', (event) => {
+  const element = document.getElementById('case');
+  element.addEventListener('animationend', () => {
+    const contentToShow = document.getElementById('contentToShow');
+    contentToShow.classList.remove('hidden');
+    contentToShow.classList.add('visible');
+    });
+  });
   function getElementByXpath(path) {
     return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
   }
@@ -159,14 +167,6 @@
   }
 
   let isItemSold = false;
-  document.addEventListener('DOMContentLoaded', (event) => {
-  const element = document.getElementById('case');
-  element.addEventListener('animationend', () => {
-    const contentToShow = document.getElementById('contentToShow');
-    contentToShow.classList.remove('hidden');
-    contentToShow.classList.add('visible');
-    });
-  });
 
   function sellItem() {
     if (!isItemSold) {
@@ -195,7 +195,6 @@
         alert("Необходимо войти")
     }
     else{
-
         email = email_elem.textContent;
         console.log(window.location.href)
         fetch("http://127.0.0.1:5000/api/balance_case", {
